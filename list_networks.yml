@@ -1,0 +1,21 @@
+- name: List VM instances
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - google.cloud
+  vars_files:
+    - ./credentials/project-name-999999.yml
+
+  tasks:
+
+    - name: List all networks
+      gcp_compute_network_info:
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+      register: network_list
+
+    - name: Print network names
+      debug:
+        var: network_list

@@ -1,0 +1,9 @@
+---
+collections:
+# With just the collection name
+#- my_namespace.my_collection
+
+# With the collection name, version, and source options
+- name: google.cloud
+  version: 0.0.7
+  # source: 'The Galaxy URL to pull the collection from (default: ``--api-server`` from cmdline)'

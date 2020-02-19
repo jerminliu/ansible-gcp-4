@@ -1,0 +1,9 @@
+gcp_region: us-west2
+gcp_zone: us-west2-b
+disk_name: disk-instance
+disk_size: 10
+disk_image: projects/debian-cloud/global/images/family/debian-9
+network_name: network-instance
+address_name: address-instance
+instance_name: myhappyansiblevm
+gce_machine_type: f1-micro

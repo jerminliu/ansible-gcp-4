@@ -1,0 +1,63 @@
+- name: Create Instance
+  hosts: localhost
+  connection: local
+  gather_facts: no
+  collections:
+    - google.cloud
+  vars_files:
+    - ./credentials/project-name-999999.yml
+
+  tasks:
+
+    - name: Delete the Instance
+      gcp_compute_instance:
+        name: "{{ instance_name }}"
+        zone: "{{ gcp_zone }}"
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+        state: absent
+
+    - name: Delete the Disk
+      gcp_compute_disk:
+        name: "{{ disk_name }}"
+        size_gb: "{{ disk_size }}"
+        # source_image: projects/ubuntu-os-cloud/global/images/family/ubuntu-1604-lts
+        zone: "{{ gcp_zone }}"
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+        state: absent
+      register: disk
+
+    - name: Delete the Network
+      gcp_compute_network:
+        name: "{{ network_name }}"
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+        state: absent
+      register: network
+
+    - name: Delete the Address
+      gcp_compute_address:
+        name: "{{ address_name }}"
+        region: "{{ gcp_region }}"
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+        state: absent
+      register: address
+
+    - name: List all instances
+      gcp_compute_instance_info:
+        zone: "{{ gcp_zone }}"
+        project: "{{ project_name }}"
+        auth_kind: serviceaccount
+        service_account_contents: "{{ gce_json_contents | string }}"
+      register: instance_list
+
+    - name: Print instance names
+      debug:
+        msg: "Instance name: {{ item }}"
+      loop: "{{ instance_list | json_query('resources[*].name') }}"
