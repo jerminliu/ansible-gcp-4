@@ -9,6 +9,7 @@
 
   tasks:
 
+
     - name: Delete the Instance
       gcp_compute_instance:
         name: "{{ instance_name }}"
